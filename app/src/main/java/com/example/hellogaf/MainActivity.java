@@ -9,10 +9,21 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity {
+import java.util.ArrayList;
+import java.util.List;
+
+public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+    private Spinner mSpinner;
+    private ArrayAdapter<String> mSpinnerAdapter;
+    private List<String> mDataSource;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,26 +32,47 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        final EditText email = findViewById(R.id.email_input);
+        final EditText phone = findViewById(R.id.phone_input);
+        final CheckBox tc = findViewById(R.id.tc_box);
+        final Button submit = findViewById(R.id.submit_btn);
+
+        submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(MainActivity.this, "Salut!",Toast.LENGTH_LONG).show();
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
+                String emailAddress = email.getText().toString();
+                String phoneNumber = phone.getText().toString();
+                boolean isAccepted = tc.isChecked();
+                boolean isValid = true;
+                if (emailAddress.equals("")) {
+                    email.setError("email is required");
+                    isValid = false;
+                }
+
+                if (phoneNumber.equals("")) {
+                    phone.setError("phone is required");
+                    isValid = false;
+                }
+
+                if (!isAccepted) isValid = false;
+
+                if (isValid) {
+                    Toast.makeText(
+                            MainActivity.this,
+                            emailAddress + " " + phoneNumber,
+                            Toast.LENGTH_LONG).show();
+                }
             }
         });
 
-        Button button = findViewById(R.id.the_button);
-        button.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
-                    Toast.makeText(MainActivity.this, "View touch", Toast.LENGTH_LONG).show();
-                }
-                return false;
-            }
-        });
+        mDataSource = getDataSource();
+        mSpinner = findViewById(R.id.versionSpinner);
+        mSpinnerAdapter = new ArrayAdapter<>(
+                this,
+                android.R.layout.simple_spinner_item,
+                mDataSource);
+        mSpinner.setAdapter(mSpinnerAdapter);
+        mSpinner.setOnItemSelectedListener(this);
     }
 
     @Override
@@ -63,5 +95,26 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private List<String> getDataSource() {
+        List<String> androidVers = new ArrayList<>();
+        androidVers.add("cupcake");
+        androidVers.add("froyo");
+        androidVers.add("pie");
+        return androidVers;
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        Toast.makeText(
+                this,
+                getDataSource().get(position),
+                Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
     }
 }
