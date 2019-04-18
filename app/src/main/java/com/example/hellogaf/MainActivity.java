@@ -1,29 +1,21 @@
 package com.example.hellogaf;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.MotionEvent;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.EditText;
-import android.widget.Spinner;
-import android.widget.Toast;
+
+import com.example.hellogaf.adapters.UserListAdapter;
+import com.example.hellogaf.models.UserModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
-    private Spinner mSpinner;
-    private ArrayAdapter<String> mSpinnerAdapter;
-    private List<String> mDataSource;
+public class MainActivity extends AppCompatActivity {
+    RecyclerView mUsersList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,47 +24,30 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        final EditText email = findViewById(R.id.email_input);
-        final EditText phone = findViewById(R.id.phone_input);
-        final CheckBox tc = findViewById(R.id.tc_box);
-        final Button submit = findViewById(R.id.submit_btn);
-
-        submit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String emailAddress = email.getText().toString();
-                String phoneNumber = phone.getText().toString();
-                boolean isAccepted = tc.isChecked();
-                boolean isValid = true;
-                if (emailAddress.equals("")) {
-                    email.setError("email is required");
-                    isValid = false;
-                }
-
-                if (phoneNumber.equals("")) {
-                    phone.setError("phone is required");
-                    isValid = false;
-                }
-
-                if (!isAccepted) isValid = false;
-
-                if (isValid) {
-                    Toast.makeText(
-                            MainActivity.this,
-                            emailAddress + " " + phoneNumber,
-                            Toast.LENGTH_LONG).show();
-                }
-            }
-        });
-
-        mDataSource = getDataSource();
-        mSpinner = findViewById(R.id.versionSpinner);
-        mSpinnerAdapter = new ArrayAdapter<>(
-                this,
-                android.R.layout.simple_spinner_item,
-                mDataSource);
-        mSpinner.setAdapter(mSpinnerAdapter);
-        mSpinner.setOnItemSelectedListener(this);
+//        mUsersList = findViewById(R.id.users_recycler_view);
+//        RecyclerView.LayoutManager userListLayoutManager = new LinearLayoutManager(this);
+//        mUsersList.setLayoutManager(userListLayoutManager);
+//
+//        List<UserModel> userList = new ArrayList<>();
+//        userList.add(new UserModel("Vlad", "Cocos"));
+//        userList.add(new UserModel("Andrei", "Popescu"));
+//        userList.add(new UserModel("Vlad", "Cocos"));
+//        userList.add(new UserModel("Andrei", "Popescu"));
+//        userList.add(new UserModel("Vlad", "Cocos"));
+//        userList.add(new UserModel("Andrei", "Popescu"));
+//        userList.add(new UserModel("Vlad", "Cocos"));
+//        userList.add(new UserModel("Andrei", "Popescu"));
+//        userList.add(new UserModel("Vlad", "Cocos"));
+//        userList.add(new UserModel("Andrei", "Popescu"));
+//        userList.add(new UserModel("Vlad", "Cocos"));
+//        userList.add(new UserModel("Andrei", "Popescu"));
+//        userList.add(new UserModel("Vlad", "Cocos"));
+//        userList.add(new UserModel("Andrei", "Popescu"));
+//        userList.add(new UserModel("Vlad", "Cocos"));
+//        userList.add(new UserModel("Andrei", "Popescu"));
+//
+//        UserListAdapter listAdapter = new UserListAdapter(userList);
+//        mUsersList.setAdapter(listAdapter);
     }
 
     @Override
@@ -95,26 +70,5 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    private List<String> getDataSource() {
-        List<String> androidVers = new ArrayList<>();
-        androidVers.add("cupcake");
-        androidVers.add("froyo");
-        androidVers.add("pie");
-        return androidVers;
-    }
-
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        Toast.makeText(
-                this,
-                getDataSource().get(position),
-                Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-
     }
 }
